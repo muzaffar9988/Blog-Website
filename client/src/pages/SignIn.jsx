@@ -7,6 +7,7 @@ import {
   signInFailure,
 } from "../redux/user/userSlice.jsx";
 import { useSelector, useDispatch } from "react-redux";
+import OAuth from "../components/OAuth.jsx";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -25,7 +26,7 @@ export default function SignIn() {
       return dispatch(signInFailure("Input fields are required"));
 
     try {
-      const res = await fetch("api/auth/signin", {
+      const res = await fetch("/api/auth/signin", {
         method: "POST",
         body: JSON.stringify(formData),
         headers: { "Content-Type": "application/json" },
@@ -98,7 +99,9 @@ export default function SignIn() {
                 "Sign In"
               )}
             </Button>
+            <OAuth />
           </form>
+
           <div className="flex gap-2 text-sm mt-5">
             <span>Don&apos;t have an account? </span>{" "}
             <Link to="/sign-up" className="text-blue-500">
