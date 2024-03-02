@@ -4,6 +4,7 @@ import { HiArrowSmRight, HiUser } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+
 export default function Dashsidebar() {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -24,6 +25,7 @@ export default function Dashsidebar() {
               icon={HiUser}
               label="user"
               labelColor="dark"
+              as="div"
             >
               Profile
             </Sidebar.Item>
