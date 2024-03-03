@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRef } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 import {
   getStorage,
@@ -24,7 +25,7 @@ import {
 } from "../redux/user/userSlice";
 
 export default function Dashprofile() {
-  const { currentUser, error } = useSelector((state) => state.user);
+  const { currentUser, error, loading } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -253,10 +254,21 @@ export default function Dashprofile() {
           type="submit"
           gradientDuoTone={"purpleToBlue"}
           outline
-          disabled={imageFileUploading}
+          disabled={loading || imageFileUploading}
         >
-          Update
+          {loading || imageFileUploading ? "Loading..." : "Update"}
         </Button>
+        {currentUser.isAdmin && (
+          <Link to="/create-post">
+            <Button
+              gradientDuoTone="purpleToPink"
+              type="button"
+              className="w-full"
+            >
+              Create a post
+            </Button>
+          </Link>
+        )}
       </form>
       <div className="text-red-500 flex justify-between mt-5">
         <span className="cursor-pointer" onClick={() => setShowModal(true)}>
