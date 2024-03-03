@@ -73,3 +73,19 @@ export const deleteUser = async (req, res, next) => {
     return next(errorHandler(400, "error in deleting account"));
   }
 };
+
+export const signout = async (req, res, next) => {
+  try {
+    const result = res
+      .clearCookie("access_token")
+      .status(200)
+      .json({ message: "cookie deleted" });
+
+    console.log(result);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      message: error.message,
+    });
+  }
+};
