@@ -7,10 +7,9 @@ export function test(req, res) {
 }
 
 export const updatedUser = async (req, res, next) => {
-  console.log(req.params.userId);
   if (req.user.id !== req.params.userId)
     return next(errorHandler(401, "You are not allowed to Update profile"));
-  console.log(req.user.id);
+
   if (req.body.password) {
     if (req.body.password.length < 7)
       return next(
@@ -18,7 +17,6 @@ export const updatedUser = async (req, res, next) => {
       );
 
     request.body.password = bcryptjs.hashSync(req.body.password, 10);
-    console.log(request.body.password);
   }
   if (req.body.username) {
     if (req.body.username.length < 7)
@@ -34,7 +32,6 @@ export const updatedUser = async (req, res, next) => {
         errorHandler(400, "username must contain letters and numbers")
       );
     }
-    console.log(req.body.username);
   }
 
   try {
