@@ -5,10 +5,13 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { signOutSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { HiDocumentText } from "react-icons/hi";
 
 export default function Dashsidebar() {
   const location = useLocation();
   const [tab, setTab] = useState("");
+  const { currentUser } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
@@ -50,11 +53,21 @@ export default function Dashsidebar() {
             <Sidebar.Item
               active={tab === "profile"}
               icon={HiUser}
-              label="user"
+              label={currentUser.isAdmin ? "Admin" : "user"}
               labelColor="dark"
               as="div"
             >
               Profile
+            </Sidebar.Item>
+          </Link>
+          <Link to="/dashboard?tab=posts">
+            <Sidebar.Item
+              icon={HiDocumentText}
+              labelColor="dark"
+              as="div"
+              active={tab === "posts"}
+            >
+              Posts
             </Sidebar.Item>
           </Link>
           <Sidebar.Item icon={HiArrowSmRight} className="cursor-pointer">
