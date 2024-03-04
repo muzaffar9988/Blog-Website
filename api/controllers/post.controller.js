@@ -55,8 +55,8 @@ export const getposts = async (req, res, next) => {
     const sortDirection = req.query.order === "asc" ? 1 : -1;
     console.log(sortDirection);
 
-    const posts = await Post.find(
-      {...(req.query.userId && { userId: req.query.userId }),
+    const posts = await Post.find({
+      ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.postId && { _id: req.query.postId }),
@@ -72,8 +72,8 @@ export const getposts = async (req, res, next) => {
           },
           { content: { $regex: req.query.searchTerm, $options: "i" } },
         ],
-      })}
-    )
+      }),
+    })
       .sort({ updatedAt: sortDirection })
       .skip(startIndex)
       .limit(limit);
@@ -98,6 +98,21 @@ export const getposts = async (req, res, next) => {
     });
   } catch (error) {
     console.log("unable to fetch data in post controller");
+    next(error);
+  }
+};
+export const deletepost = async (req, res, next) => {
+  console.log("reached delete");
+  if (!req.user.isAdmin || req.user.id !== req.params.userId)
+    return next(errorHandler(401, "you are not allowed to delete the post"));
+  console.log("reached before try");
+  try {
+    await Post.findByIdAndDelete(req.params.postId);
+    console.log("reached after find by id");
+    res
+      .status(200)
+      .json({ success: true, message: "post is successfully deleted" });
+  } catch (error) {
     next(error);
   }
 };
