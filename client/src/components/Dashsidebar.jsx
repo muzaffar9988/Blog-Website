@@ -7,6 +7,7 @@ import { signOutSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { HiDocumentText } from "react-icons/hi";
+import { HiUserGroup } from "react-icons/hi";
 
 export default function Dashsidebar() {
   const location = useLocation();
@@ -60,16 +61,30 @@ export default function Dashsidebar() {
               Profile
             </Sidebar.Item>
           </Link>
-          <Link to="/dashboard?tab=posts">
-            <Sidebar.Item
-              icon={HiDocumentText}
-              labelColor="dark"
-              as="div"
-              active={tab === "posts"}
-            >
-              Posts
-            </Sidebar.Item>
-          </Link>
+          {currentUser.isAdmin && (
+            <Link to="/dashboard?tab=posts">
+              <Sidebar.Item
+                icon={HiDocumentText}
+                labelColor="dark"
+                as="div"
+                active={tab === "posts"}
+              >
+                Posts
+              </Sidebar.Item>
+            </Link>
+          )}
+          {currentUser.isAdmin && (
+            <Link to="/dashboard?tab=users">
+              <Sidebar.Item
+                icon={HiUserGroup}
+                labelColor="dark"
+                as="div"
+                active={tab === "users"}
+              >
+                Users
+              </Sidebar.Item>
+            </Link>
+          )}
           <Sidebar.Item icon={HiArrowSmRight} className="cursor-pointer">
             <span onClick={handleSignOut}>Sign Out</span>
           </Sidebar.Item>

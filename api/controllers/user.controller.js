@@ -89,3 +89,44 @@ export const signout = async (req, res, next) => {
     });
   }
 };
+export const getUsers = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    return next(errorHandler(401, "You are not allowed to get post"));
+  }
+
+  try {
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const sortDirection = req.query.sort === "asc" ? 1 : -1;
+    const limit = parseInt(req.query.limit) || 9;
+
+    const users = await User.find()
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+    const userWithoutPassword = users.map((curr, ind) => {
+      const { password, ...rest } = curr._doc;
+      return rest;
+    });
+
+    const totalUsers = await User.countDocuments();
+
+    const date = new Date();
+    const oneMonthAgo = new Date(
+      date.getFullYear(),
+      date.getMonth() - 1,
+      date.getDate()
+    );
+
+    const lastMonthUsers = await User.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+    return res.status(200).json({
+      users: userWithoutPassword,
+      totalUsers,
+      lastMonthUsers,
+    });
+  } catch (error) {
+    console.log(error.message);
+    next(error);
+  }
+};
