@@ -47,7 +47,24 @@ export default function DashUsers() {
       console.log(error.message);
     }
   };
-  const handleDeleteUser = async () => {};
+  const handleDeleteUser = async () => {
+    setShowModal(false);
+    try {
+      const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUsers((prev) => {
+          return prev.filter((curr) => curr._id !== userIdToDelete);
+        });
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   //   const handleDeleteUser = async () => {
   //     setShowModal(false);
   //     try {
