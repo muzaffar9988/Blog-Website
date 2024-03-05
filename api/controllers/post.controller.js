@@ -47,13 +47,12 @@ export const getposts = async (req, res, next) => {
   try {
     // we will check from where we have to start and convert it into integer
     const startIndex = parseInt(req.query.startIndex) || 0;
-    console.log(startIndex);
+
     // set limit means how many post you want to show to user . if not given it will be 9
     const limit = parseInt(req.query.limit) || 9;
     // if order is asc then we will sort ascending wise else descending
-    console.log(limit);
+
     const sortDirection = req.query.order === "asc" ? 1 : -1;
-    console.log(sortDirection);
 
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
@@ -77,7 +76,7 @@ export const getposts = async (req, res, next) => {
       .sort({ updatedAt: sortDirection })
       .skip(startIndex)
       .limit(limit);
-    console.log("reached after db call");
+
     const totalPosts = await Post.countDocuments();
     console.log(totalPosts);
     const now = new Date();
@@ -86,7 +85,7 @@ export const getposts = async (req, res, next) => {
       now.getMonth() - 1,
       now.getDate()
     );
-    console.log(oneMonthAgo);
+
     const lastMonthPost = await Post.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
@@ -112,6 +111,29 @@ export const deletepost = async (req, res, next) => {
     res
       .status(200)
       .json({ success: true, message: "post is successfully deleted" });
+  } catch (error) {
+    next(error);
+  }
+};
+export const updatepost = async (req, res, next) => {
+  if (!req.user.isAdmin || req.user.id !== req.params.userId)
+    return next(errorHandler(401, "you are not allowed to update post"));
+
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.postId,
+      {
+        $set: {
+          title: req.body.title,
+          category: req.body.category,
+          content: req.body.content,
+          image: req.body.image,
+        },
+      },
+      { new: true }
+    );
+
+    return res.status(200).json(updatedPost);
   } catch (error) {
     next(error);
   }
