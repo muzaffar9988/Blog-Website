@@ -23,3 +23,14 @@ export const createComment = async (req, res, next) => {
     next(error);
   }
 };
+export const getPostComment = async (req, res, next) => {
+  try {
+    const postComment = await Comment.find({ postId: req.params.postId }).sort({
+      createdAt: -1,
+    });
+    if (!postComment) return next(errorHandler(401, "error in fetching api"));
+    res.status(200).json(postComment);
+  } catch (error) {
+    next(error);
+  }
+};
