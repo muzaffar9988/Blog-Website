@@ -7,6 +7,7 @@ import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import postRoute from "./routes/post.route.js";
 import cookieParser from "cookie-parser";
+import commentRoute from "./routes/comment.route.js";
 // import cors from "cors";
 dotenv.config();
 mongoose
@@ -27,6 +28,7 @@ app.listen(3000, () => {
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoute);
+app.use("/api/comment", commentRoute);
 
 app.use((error, req, res, next) => {
   const statusCode = error.statusCode || 500;
