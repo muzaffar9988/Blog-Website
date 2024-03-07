@@ -1,5 +1,6 @@
 import errorHandler from "../utils/error.js";
 import Comment from "../models/comment.model.js";
+
 export const createComment = async (req, res, next) => {
   const { postId, content, userId } = req.body;
   if (userId !== req.user.id) {
@@ -93,6 +94,44 @@ export const deleteComment = async (req, res, next) => {
     await Comment.findByIdAndDelete(req.params.commentId);
 
     res.status(200).json("comment has been deleted");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getComments = async (req, res, next) => {
+  if (!req.user.isAdmin)
+    return next(errorHandler(400, "You are not allowed to delete comment"));
+
+  try {
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+    const sortDirection = req.query.order === "desc" ? -1 : 1;
+    const comments = await Comment.find()
+      .sort({ createdAt: sortDirection })
+      .limit(limit)
+      .skip(startIndex);
+
+    console.log("before total count");
+
+    const totalComments = await Comment.countDocuments();
+    const now = new Date();
+    console.log(totalComments);
+    const lastMonthDate = new Date(
+      now.getDate(),
+      now.getMonth() - 1,
+      now.getFullYear()
+    );
+
+    const lastMonthAgo = await Comment.countDocuments({
+      createdAt: { $gte: lastMonthDate },
+    });
+
+    return res.status(200).json({
+      comments,
+      totalComments,
+      lastMonthAgo,
+    });
   } catch (error) {
     next(error);
   }
