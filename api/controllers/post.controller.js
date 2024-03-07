@@ -25,7 +25,7 @@ export const create = async (req, res, next) => {
 
     const savedPost = await post.save();
 
-    console.log(savedPost);
+   
     return res.status(201).json({
       success: true,
 
