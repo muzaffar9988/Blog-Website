@@ -54,3 +54,46 @@ export const likeComment = async (req, res, next) => {
     next(error);
   }
 };
+export const editComment = async (req, res, next) => {
+  try {
+    const comment = await Comment.findById(req.params.commentId);
+    if (!comment) return next(errorHandler(401, "error in fetching comment"));
+
+    if (comment.userId !== req.user.id && !req.user.isAdmin) {
+      return next(errorHandler(400, "You are not allowed to edit"));
+    }
+    const updatedComment = await Comment.findByIdAndUpdate(
+      req.params.commentId,
+      {
+        $set: {
+          content: req.body.content,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    if (!updatedComment)
+      return next(errorHandler(400, "error in updating post"));
+    console.log(updatedComment);
+    res.status(200).json(updatedComment);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteComment = async (req, res, next) => {
+  try {
+    const comment = await Comment.findById(req.params.commentId);
+    if (!comment) return next(errorHandler(404, "Comment not found"));
+
+    if (req.user.id !== comment.userId && !req.user.isAdmin)
+      return next(errorHandler(400, "You are not allowed to delete the post"));
+
+    await Comment.findByIdAndDelete(req.params.commentId);
+
+    res.status(200).json("comment has been deleted");
+  } catch (error) {
+    next(error);
+  }
+};

@@ -1,9 +1,8 @@
 import errorHandler from "../utils/error.js";
 import Post from "../models/post.model.js";
 export const create = async (req, res, next) => {
-  console.log("create post re");
   console.log(req.body);
-  console.log("request user", req.user);
+
   if (!req.user.isAdmin)
     return next(errorHandler(401, "you are not allowed to create a post"));
   if (!req.body.title || !req.body.content)
@@ -11,7 +10,6 @@ export const create = async (req, res, next) => {
 
   // slug is used to make a website which is SEO friendly
 
-  console.log("slug");
   const slug = req.body.title
     .split(" ")
     .join("-")
@@ -24,20 +22,19 @@ export const create = async (req, res, next) => {
       slug,
       userId: req.user.id,
     });
-    console.log("before saving");
+
     const savedPost = await post.save();
-    console.log("after saving");
 
     console.log(savedPost);
     return res.status(201).json({
       success: true,
-      message: "post successfully created",
+
       data: savedPost,
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "error in creating post",
+
       error: error.message,
     });
   }
@@ -96,18 +93,16 @@ export const getposts = async (req, res, next) => {
       lastMonthPost,
     });
   } catch (error) {
-    console.log("unable to fetch data in post controller");
     next(error);
   }
 };
 export const deletepost = async (req, res, next) => {
-  console.log("reached delete");
   if (!req.user.isAdmin || req.user.id !== req.params.userId)
     return next(errorHandler(401, "you are not allowed to delete the post"));
-  console.log("reached before try");
+
   try {
     await Post.findByIdAndDelete(req.params.postId);
-    console.log("reached after find by id");
+
     res
       .status(200)
       .json({ success: true, message: "post is successfully deleted" });
