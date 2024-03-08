@@ -8,7 +8,8 @@ import authRoutes from "./routes/auth.route.js";
 import postRoute from "./routes/post.route.js";
 import cookieParser from "cookie-parser";
 import commentRoute from "./routes/comment.route.js";
-// import cors from "cors";
+import path from "path";
+
 dotenv.config();
 mongoose
   .connect(process.env.MONGO)
@@ -17,7 +18,7 @@ mongoose
     console.log(error);
     console.log("error in connecting db");
   });
-
+const __dirname = path.resolve();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -30,6 +31,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoute);
 app.use("/api/comment", commentRoute);
 
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 app.use((error, req, res, next) => {
   const statusCode = error.statusCode || 500;
   const message = error.message || "Internal server errror";
