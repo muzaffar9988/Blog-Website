@@ -15,9 +15,6 @@ export default function CommentSection({ postId }) {
   const [showModal, setShowModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
 
-  console.log(comments);
-  console.log(comments.length);
-
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -183,7 +180,10 @@ export default function CommentSection({ postId }) {
               comment={comment}
               onLike={handleLike}
               onEdit={handleEdit}
-              onDelete={handleDelete}
+              onDelete={(commentId) => {
+                setShowModal(true);
+                setCommentToDelete(commentId);
+              }}
             />
           ))}
         </>
@@ -205,10 +205,7 @@ export default function CommentSection({ postId }) {
             <div className="flex justify-center gap-4">
               <Button
                 color="failure"
-                onClick={(commentId) => {
-                  setShowModal(true);
-                  setCommentToDelete(commentId);
-                }}
+                onClick={() => handleDelete(commentToDelete)}
               >
                 Yes, I'm sure
               </Button>

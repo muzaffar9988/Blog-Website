@@ -14,12 +14,7 @@ export const createComment = async (req, res, next) => {
     });
     const savedPost = await newComment.save();
 
-    if (!savedPost) return next(errorHandler(401, "error in saving comment"));
-    return res.status(200).json({
-      data: savedPost,
-      success: true,
-      message: "data saved successfully",
-    });
+    return res.status(200).json(savedPost);
   } catch (error) {
     next(error);
   }
@@ -42,11 +37,11 @@ export const likeComment = async (req, res, next) => {
 
     const userIndex = comment.likes.indexOf(req.user.id);
     if (userIndex === -1) {
-      comment.likes.push(req.user.id);
       comment.numberOfLikes += 1;
+      comment.likes.push(req.user.id);
     } else {
-      comment.likes.splice(userIndex, 1);
       comment.numberOfLikes -= 1;
+      comment.likes.splice(userIndex, 1);
     }
     await comment.save();
 

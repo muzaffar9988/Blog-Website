@@ -25,7 +25,6 @@ export const create = async (req, res, next) => {
 
     const savedPost = await post.save();
 
-   
     return res.status(201).json({
       success: true,
 
@@ -50,18 +49,16 @@ export const getposts = async (req, res, next) => {
     // if order is asc then we will sort ascending wise else descending
 
     const sortDirection = req.query.order === "asc" ? 1 : -1;
+    //regex is used to search if anything that matches to search. in this case if search matches to title and content
+    // or is used so that if search is present in title and content
+    //options here means capital letter and small letter be treated as same
 
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.postId && { _id: req.query.postId }),
-
       ...(req.query.searchTerm && {
-        //regex is used to search if anything that matches to search. in this case if search matches to title and content
-        // or is used so that if search is present in title and content
-        //options here means capital letter and small letter be treated as same
-
         $or: [
           {
             title: { $regex: req.query.searchTerm, $options: "i" },
@@ -75,7 +72,7 @@ export const getposts = async (req, res, next) => {
       .limit(limit);
 
     const totalPosts = await Post.countDocuments();
-    console.log(totalPosts);
+
     const now = new Date();
     const oneMonthAgo = new Date(
       now.getFullYear(),
