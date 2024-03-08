@@ -24,10 +24,14 @@ export default function FooterCom() {
               <Footer.Title title="about" />
               <Footer.LinkGroup col>
                 {" "}
-                <Footer.Link href="#" target="_blank" rel="noopener noreferrer">
+                <Footer.Link
+                  href="/projects"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Projects
                 </Footer.Link>
-                <Footer.Link href="#" target="_blank" rel="noopener noreferrer">
+                <Footer.Link href="/" target="_blank" rel="noopener noreferrer">
                   Nexus Blogs
                 </Footer.Link>
               </Footer.LinkGroup>
@@ -36,11 +40,19 @@ export default function FooterCom() {
               <Footer.Title title="follow us" />
               <Footer.LinkGroup col>
                 {" "}
-                <Footer.Link href="#" target="_blank" rel="noopener noreferrer">
+                <Footer.Link
+                  href="https://github.com/mohdali770409?tab=repositories"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   GitHub
                 </Footer.Link>
-                <Footer.Link href="#" target="_blank" rel="noopener noreferrer">
-                  Discord
+                <Footer.Link
+                  href="https://www.linkedin.com/in/mohd-ali-6859951b2/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Linkedin
                 </Footer.Link>
               </Footer.LinkGroup>
             </div>
@@ -62,8 +74,14 @@ export default function FooterCom() {
             year={new Date().getFullYear()}
           />
           <div className="flex gap-6 mt-4 sm:justify-center">
-            <Footer.Icon href="#" icon={FaGithub}></Footer.Icon>
-            <Footer.Icon href="#" icon={FaLinkedin}></Footer.Icon>
+            <Footer.Icon
+              href="https://github.com/mohdali770409?tab=repositories"
+              icon={FaGithub}
+            ></Footer.Icon>
+            <Footer.Icon
+              href="https://www.linkedin.com/in/mohd-ali-6859951b2/"
+              icon={FaLinkedin}
+            ></Footer.Icon>
             <Footer.Icon href="#" icon={FaFacebook}></Footer.Icon>
             <Footer.Icon href="#" icon={FaInstagram}></Footer.Icon>
             <Footer.Icon href="#" icon={FaXTwitter}></Footer.Icon>

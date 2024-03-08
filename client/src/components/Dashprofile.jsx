@@ -38,9 +38,10 @@ export default function Dashprofile() {
   const dispatch = useDispatch();
 
   const filePickerRef = useRef();
-  function changeHandler(e) {
+
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-  }
+  };
   console.log(formData);
   function handleImageChange(e) {
     setImageFileUploading(true);
@@ -111,6 +112,7 @@ export default function Dashprofile() {
     //   }
     // }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUpdateUserError(null);
@@ -153,7 +155,7 @@ export default function Dashprofile() {
       dispatch(deleteUserStart());
 
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: "delete",
+        method: "DELETE",
       });
 
       const data = await res.json();
@@ -173,13 +175,12 @@ export default function Dashprofile() {
         method: "POST",
       });
       const data = await res.json();
-      if (!res.ok) console.log("error in fetching response");
+      if (!res.ok) console.log(data.message);
       else {
-        console.log(data.message);
         dispatch(signOutSuccess());
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 
@@ -235,20 +236,20 @@ export default function Dashprofile() {
           id="username"
           placeholder="username"
           defaultValue={currentUser.username}
-          onChange={changeHandler}
+          onChange={handleChange}
         />
         <TextInput
           type="email"
           id="email"
           placeholder="email"
           defaultValue={currentUser.email}
-          onChange={changeHandler}
+          onChange={handleChange}
         />
         <TextInput
           type="password"
           id="password"
           placeholder="password"
-          onChange={changeHandler}
+          onChange={handleChange}
         />
         <Button
           type="submit"
