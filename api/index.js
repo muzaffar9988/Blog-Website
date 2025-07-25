@@ -9,8 +9,8 @@ import postRoute from "./routes/post.route.js";
 import cookieParser from "cookie-parser";
 import commentRoute from "./routes/comment.route.js";
 import path from "path";
-
-dotenv.config();
+import { configDotenv } from "dotenv";
+configDotenv();
 mongoose
   .connect(process.env.MONGO)
   .then(() => console.log("db connected successfully"))

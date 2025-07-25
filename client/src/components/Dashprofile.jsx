@@ -42,7 +42,7 @@ export default function Dashprofile() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
-  console.log(formData);
+ 
   function handleImageChange(e) {
     setImageFileUploading(true);
     const file = e.target.files[0];
