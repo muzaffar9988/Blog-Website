@@ -15,7 +15,7 @@ import { app } from "../firebase";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
+import 'quill/dist/quill.snow.css';
 export default function UpdatePost() {
   const [file, setFile] = useState(null);
 
